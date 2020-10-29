@@ -71,7 +71,7 @@ def pickup():
         messagebox.showerror(title='Fatal Error', message='点名人数超过总人数')
         return
     global checked
-    if not checked:
+    if checked:
         # print(len(nameLst['modified']))
         if len(nameLst['modified']) == 0:
             nameLst['modified'] = []
@@ -107,7 +107,7 @@ def pickup():
         for i in pickedNums:
             nameLst['modified'].pop(i - offset)
             offset += 1
-        # print(nameLst)
+        print(nameLst)
     else:
         pickedNames = ''
         randData = rand_chooser(nameLst['orig'], pickupNum)
