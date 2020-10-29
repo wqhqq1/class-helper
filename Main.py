@@ -65,47 +65,56 @@ def pickup():
         messagebox.showerror(title = 'Fatal Error', message = '点名人数必须为整数!')
         return
     if pickupNum <= 0:
-        messagebox.showerror(title = 'Fatal Error', message = '点名人数必须大于0!')
+        messagebox.showerror(title='Fatal Error', message='点名人数必须大于0!')
         return
-    # print(len(nameLst['modified']))
-    if len(nameLst['modified']) == 0:
-        nameLst['modified'] = []
-        nameLst['except'] = []
-        for i in nameLst['orig']:
-            nameLst['modified'].append(i)
-        # print('again', nameLst)
     if pickupNum > len(nameLst['orig']):
-        messagebox.showerror(title = 'Fatal Error', message = '点名人数超过总人数')
+        messagebox.showerror(title='Fatal Error', message='点名人数超过总人数')
         return
-    if len(nameLst['modified']) < pickupNum:
-        randData = rand_chooser(nameLst['except'], pickupNum - len(nameLst['modified']))
-        # print(randData)
-        for i in randData:
-            nameLst['modified'].append(nameLst['except'][i - 1])
-        randData.sort()
-        offset = 1
-        for i in randData:
-            nameLst['except'].pop(i - offset)
-            offset += 1
+    global checked
+    if not checked:
+        # print(len(nameLst['modified']))
+        if len(nameLst['modified']) == 0:
+            nameLst['modified'] = []
+            nameLst['except'] = []
+            for i in nameLst['orig']:
+                nameLst['modified'].append(i)
+            # print('again', nameLst)
+        if len(nameLst['modified']) < pickupNum:
+            randData = rand_chooser(nameLst['except'], pickupNum - len(nameLst['modified']))
+            # print(randData)
+            for i in randData:
+                nameLst['modified'].append(nameLst['except'][i - 1])
+            randData.sort()
+            offset = 1
+            for i in randData:
+                nameLst['except'].pop(i - offset)
+                offset += 1
 
-    pickedNums = rand_chooser(nameLst['modified'], pickupNum)
-    pickedNames = ''
-    # print(pickedNums)
-    for i in pickedNums:
-        pickedNames += nameLst['modified'][i - 1]
-        nameLst['except'].append(nameLst['modified'][i - 1])
-        # print(i)
-        if i != pickedNums[len(pickedNums) - 1]:
-            pickedNames += ','
-    # print(pickedNames)
-    # print(len(nameLst))
-    print(pickedNums)
-    pickedNums.sort()
-    offset = 1
-    for i in pickedNums:
-        nameLst['modified'].pop(i - offset)
-        offset += 1
-    print(nameLst)
+        pickedNums = rand_chooser(nameLst['modified'], pickupNum)
+        pickedNames = ''
+        # print(pickedNums)
+        for i in pickedNums:
+            pickedNames += nameLst['modified'][i - 1]
+            nameLst['except'].append(nameLst['modified'][i - 1])
+            # print(i)
+            if i != pickedNums[len(pickedNums) - 1]:
+                pickedNames += ','
+        # print(pickedNames)
+        # print(len(nameLst))
+        # print(pickedNums)
+        pickedNums.sort()
+        offset = 1
+        for i in pickedNums:
+            nameLst['modified'].pop(i - offset)
+            offset += 1
+        # print(nameLst)
+    else:
+        pickedNames = ''
+        randData = rand_chooser(nameLst['orig'], pickupNum)
+        for i in randData:
+            pickedNames += nameLst['orig'][i - 1]
+            if i != randData[len(randData) - 1]:
+                pickedNames += ','
     try:
         delete('nameData')
     except:
@@ -173,10 +182,13 @@ rltLabel = Label(root, text = '结果:')
 rltLabel.grid(row = 3, column = 0)
 rltDLabel = Label(root)
 rltDLabel.grid(row = 3, column = 1, sticky = W)
+checked = BooleanVar()
+origCButton = Checkbutton(root, text = '使用传统方式', variable = checked)
+origCButton.grid(row = 4, column = 0)
 restoreButton = Button(root, text = '还原', command = restore)
-restoreButton.grid(row = 4, column = 2)
+restoreButton.grid(row = 5, column = 2)
 pickupButton = Button(root, text = '点名', command = pickup)
-pickupButton.grid(row = 4, column = 1)
+pickupButton.grid(row = 5, column = 1)
 exitButton = Button(root, text = '退出', command = root.destroy)
-exitButton.grid(row = 4, column = 0)
+exitButton.grid(row = 5, column = 0)
 root.mainloop()
