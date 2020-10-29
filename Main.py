@@ -79,6 +79,9 @@ def pickup():
             for i in nameLst['orig']:
                 nameLst['modified'].append(i)
             # print('again', nameLst)
+            again = messagebox.askokcancel(title = '提示', message = '所有学生均抽完，要重新开始吗？')
+            if not again:
+                return
         if len(nameLst['modified']) < pickupNum:
             randData = rand_chooser(nameLst['except'], pickupNum - len(nameLst['modified']))
             # print(randData)
@@ -89,6 +92,9 @@ def pickup():
             for i in randData:
                 nameLst['except'].pop(i - offset)
                 offset += 1
+            again = messagebox.askokcancel(title = '提示', message = '点名人数超过未抽人数，要从抽过的人当中抽取吗?')
+            if not again:
+                return
 
         pickedNums = rand_chooser(nameLst['modified'], pickupNum)
         pickedNames = ''
@@ -107,7 +113,7 @@ def pickup():
         for i in pickedNums:
             nameLst['modified'].pop(i - offset)
             offset += 1
-        print(nameLst)
+        # print(nameLst)
     else:
         pickedNames = ''
         randData = rand_chooser(nameLst['orig'], pickupNum)
