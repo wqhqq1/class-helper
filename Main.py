@@ -44,7 +44,7 @@ def filechoose():
     statusLabel.config(text = '已导入姓名表', fg = 'black')
     messagebox.showinfo(title = 'Info', message = '导入成功!')
 
-def rand_chooser(lst = [], num = 0):
+def rand_chooser(lst, num = 0):
     n = 0
     rands_temp = [i for i in range(1,len(lst)+1)]
     rands = rand(rands_temp, num)
@@ -71,7 +71,7 @@ def pickup():
         messagebox.showerror(title='Fatal Error', message='点名人数超过总人数')
         return
     global checked
-    if checked:
+    if not checked.get():
         # print(len(nameLst['modified']))
         if len(nameLst['modified']) == 0:
             nameLst['modified'] = []
